@@ -1,31 +1,26 @@
-** DEPRECATED **
-================
+** WORK IN PROGRESS **
+======================
 
 Overview
 ========
 
-``django-mollie-ideal`` provides a Python interface to the iDEAL API by Mollie.nl_ for use in Django projects. It requires Python 2.5 or higher.
+``django-mollie-ideal`` provides a Python interface to the payment API by Mollie.com_ for use in Django projects. It requires Python 2.5 or higher.
 
-.. _Mollie.nl: http://www.mollie.nl/
+.. _Mollie.com: http://www.mollie.com/
 
-iDEAL is a payment system used in the Netherlands which allows Dutch consumers to make online payments via the secure environment of their own bank.
+Mollie.com provide a unified API which removes the complexity of interacting with the individual banks which support online payments. You can find detailed information about the Mollie.com API here_.
 
-Mollie.nl provide a unified API which removes the complexity of interacting with the individual Dutch banks which support iDEAL payments. You can find detailed information about the Mollie.nl iDEAL API here_.
+.. _here: https://docs.mollie.com/reference/v2/payments-api/create-payment
 
-.. _here: http://www.mollie.nl/support/documentatie/betaaldiensten/ideal/en/
-
-Nederlandse versie vindt u hier_.
-
-.. _hier: http://www.mollie.nl/support/documentatie/betaaldiensten/ideal/
 
 Installation
 ============
 
-Link the ``mollie`` directory into your ``PYTHONPATH`` and add ``mollie.ideal`` to your ``INSTALLED_APPS``::
+Link the ``mollie`` directory into your ``PYTHONPATH`` and add ``mollie.api`` to your ``INSTALLED_APPS``::
 
     INSTALLED_APPS = (
         ...
-        'mollie.ideal',
+        'mollie.api',
     )
 
 ``django-mollie-ideal`` will use ``lxml`` if it is installed. You can install ``lxml`` as follows::
@@ -37,11 +32,11 @@ If you do not have ``lxml`` installed, the built-in ``xml.etree.[c]ElementTree``
 Registering with Mollie.nl
 ==========================
 
-Before you can start using ``django-mollie-ideal`` you must `register with Mollie.nl`_.
+Before you can start using ``django-mollie-ideal`` you must `register with Mollie.com`_.
 
-.. _`register with Mollie.nl`: http://www.mollie.nl/aanmelden/
+.. _`register with Mollie.com`: http://www.mollie.com/signup/
 
-Once you have registered you will receive a so-called "Partner ID" which you should set as the value of ``MOLLIE_PARTNER_ID`` in your Django project's ``settings.py`` file. See below for more information about the available settings.
+Once you have registered you will receive a "Partner ID" which you should set as the value of ``MOLLIE_PARTNER_ID`` in your Django project's ``settings.py`` file. See below for more information about the available settings.
 
 Settings
 ========

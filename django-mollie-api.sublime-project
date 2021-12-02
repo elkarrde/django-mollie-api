@@ -1,0 +1,11 @@
+{
+  "folders":
+  [
+    {
+      "path": ".",
+      "name": "Django Mollie API",
+      "folder_exclude_patterns": [ "node_modules", ".github", ".git", ".vscode", ".idea" ],
+      "file_exclude_patterns": [ "npm-debug.log", "*.bak", "*.min.js", "*.sublime-*" ]
+    }
+  ]
+}

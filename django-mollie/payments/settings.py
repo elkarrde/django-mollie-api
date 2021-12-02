@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from django.conf import settings
 
@@ -15,3 +15,5 @@ MOLLIE_PROFILE_KEY = getattr(settings, 'MOLLIE_PROFILE_KEY', None)
 MOLLIE_REVERSE_URLS = getattr(settings, 'MOLLIE_REVERSE_URLS', False)
 # todo: implement django.contrib.sites usage instead of str concatenation
 MOLLIE_IMPLEMENTING_SITE_URL = getattr(settings, 'MOLLIE_SITE_FULL_URL', 'http://www.example.com')
+
+MOLLIE_API_KEY = 'test_API'

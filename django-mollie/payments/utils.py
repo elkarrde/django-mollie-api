@@ -1,10 +1,10 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from decimal import Decimal
 
-from mollie.ideal.helpers import _get_mollie_xml, get_mollie_bank_choices
+from .helpers import _get_mollie_xml, get_mollie_bank_choices
+from .settings import MOLLIE_BTW, MOLLIE_TRANSACTION_FEE
 
-from mollie.ideal.settings import MOLLIE_BTW, MOLLIE_TRANSACTION_FEE
 
 def query_mollie(request_dict, mode):
     valid_modes = ('check', 'fetch')
@@ -18,17 +18,19 @@ def query_mollie(request_dict, mode):
     if mode == 'fetch':
         response_dict['order_url'] = order.findtext('URL')
     elif mode == 'check':
-        response_dict['paid'] = order.findtext('payed') # sic!
+        response_dict['paid'] = order.findtext('payed')  # sic!
         consumer = order.find('consumer')
         response_dict['consumerAcount'] = consumer.findtext('consumerAccount')
         response_dict['consumerCity'] = consumer.findtext('consumerCity')
         response_dict['consumerName'] = consumer.findtext('consumerName')
     return response_dict
 
+
 def get_mollie_fee(btw=MOLLIE_BTW, fee=MOLLIE_TRANSACTION_FEE):
     btw = Decimal(btw)
     fee = Decimal(fee)
     fee += ((btw / 100) * fee)
     return fee.quantize(Decimal(10) ** -2)
+
 
 get_mollie_banklist = get_mollie_bank_choices
