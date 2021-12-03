@@ -1,11 +1,126 @@
 # -*- coding: utf-8 -*-
 
+import json
+import re
+import uuid
+
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .helpers import _get_mollie_xml, get_mollie_bank_choices
+
+class Amount:
+    __value: float = 0.00
+    __currency: str = 'EUR'
+    __allowed_currencies = {'AED', 'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD', 'HRK', 'HUF',
+                            'ILS', 'ISK', 'JPY', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD',
+                            'THB', 'TWD', 'USD', 'ZAR'}
+
+    def __init__(self, amount, currency):
+        self.__value = amount
+        self.__currency = currency
+
+    @property
+    def value(self):
+        return '%.2f' % self.__value
+
+    @property
+    def currency(self):
+        return self.__currency
+
+    @value.setter
+    def value(self, value: float):
+        if value < 1:
+            raise ValueError(_('Value too small.'))
+        self.__value = value
+
+    @currency.setter
+    def currency(self, currency: str = 'EUR'):
+        if currency not in self.__allowed_currencies:
+            raise ValueError(_('Currency not allowed.'))
+        self.__currency = currency.upper()
+
+
+class Payment:
+    __id: uuid
+    __amount: Amount
+    __description: str = ''
+    __redirect_url: str = ''
+    __webhook_url: str = ''
+    __method: str = ''
+    __metadata: json
+    __allowed_methods = {'applepay', 'creditcard', 'banktransfer', 'paypal'}
+    __url_regex = r"^https?:\/\/[\w-]{1,}\.[\w]{2,}\/?(?:[\w\.?=&]{1,})?$"
+
+    def __init__(self):
+        self.__id = uuid.uuid4()
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def amount(self):
+        return self.__amount
+
+    @property
+    def description(self):
+        return self.__amount
+
+    @property
+    def redirect_url(self):
+        return self.__redirect_url
+
+    @property
+    def webhook_url(self):
+        return self.__webhook_url
+
+    @property
+    def method(self):
+        return self.__method
+
+    @property
+    def metadata(self):
+        return self.__metadata
+
+    @id.setter
+    def id(self, val):
+        raise ValueError(_('Payment ID can not be changed.'))
+
+    @amount.setter
+    def amount(self, amount: Amount):
+        self.__amount = amount
+
+    @description.setter
+    def description(self, description: str):
+        if len(description) < 3:
+            raise ValueError(_('Description needs to be 3 letters or longer.'))
+        self.__description = description
+
+    @redirect_url.setter
+    def redirect_url(self, url: str):
+        matches = re.findall(self.__url_regex, url)
+        if not matches:
+            raise ValueError(_('Redirect URL is not an URL.'))
+        self.__redirect_url = url
+
+    @webhook_url.setter
+    def webhook_url(self, url: str):
+        matches = re.findall(self.__url_regex, url)
+        if not matches:
+            raise ValueError(_('Webhook URL is not an URL.'))
+        self.__webhook_url = url
+
+    @method.setter
+    def method(self, method: str):
+        if method not in self.__allowed_methods:
+            raise ValueError(_('Method not available.'))
+        self.__method = method
+
+    @metadata.setter
+    def metadata(self, meta: json):
+        self.__metadata = meta
 
 
 class MolliePayment(models.Model):
@@ -55,7 +170,7 @@ class MolliePayment(models.Model):
     fetch = get_order_url
 
     def is_paid(self):
-        'Checks whether a payment has been made successfully.'
+        """Checks whether a payment has been made successfully."""
         request_dict = dict(
             a='check',
             partnerid=settings.MOLLIE_PARTNER_ID,

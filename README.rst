@@ -4,7 +4,7 @@
 Overview
 ========
 
-``django-mollie-ideal`` provides a Python interface to the payment API by Mollie.com_ for use in Django projects. It requires Python 2.5 or higher.
+``django-mollie-api`` provides a Python interface to the payment API by Mollie.com_ for use in Django projects. It requires Python 2.5 or higher.
 
 .. _Mollie.com: http://www.mollie.com/
 
@@ -23,7 +23,7 @@ Link the ``mollie`` directory into your ``PYTHONPATH`` and add ``mollie.api`` to
         'mollie.api',
     )
 
-``django-mollie-ideal`` will use ``lxml`` if it is installed. You can install ``lxml`` as follows::
+``django-mollie-api`` will use ``lxml`` if it is installed. You can install ``lxml`` as follows::
 
     $ pip install lxml
 
