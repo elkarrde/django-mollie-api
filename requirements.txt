@@ -1,1 +1,5 @@
 Django~=3.2.9
+environ~=1.0
+mollie-api-python==2.12.0
+Flask~=2.0.2
+djangorestframework~=3.12.4
